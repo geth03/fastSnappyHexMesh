@@ -1,0 +1,30 @@
+#!/bin/sh
+cd "${0%/*}" || exit 1
+# fastSnappyHexMesh - Copyright (C) 2026 Seyit Temiz
+# SPDX-License-Identifier: GPL-3.0-or-later (see LICENSE)
+#
+# Builds libfastSnappyHexMesh.so ($FOAM_USER_LIBBIN) and fastSnappyHexMesh
+# ($FOAM_USER_APPBIN). Source the OpenFOAM-13 environment first.
+
+if [ -z "$WM_PROJECT_DIR" ]
+then
+    echo "Source the OpenFOAM-13 environment first, e.g." 1>&2
+    echo "    . /opt/openfoam13/etc/bashrc" 1>&2
+    exit 1
+fi
+
+if [ "$WM_PROJECT_VERSION" != "13" ]
+then
+    echo "Warning: fastSnappyHexMesh is written for OpenFOAM-13," \
+         "found $WM_PROJECT $WM_PROJECT_VERSION" 1>&2
+fi
+
+if [ ! -f /usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.a ]
+then
+    echo "Note: tcmalloc not found, building with the standard memory" \
+         "allocator (about 15 % slower)."
+    echo "      For the fast allocator: sudo apt install libgoogle-perftools-dev"
+fi
+
+wmake -j libso src/fastSnappyHexMesh || exit 1
+wmake -j app/fastSnappyHexMesh || exit 1

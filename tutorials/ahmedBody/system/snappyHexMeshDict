@@ -1,0 +1,192 @@
+// fastSnappyHexMesh test case - Copyright (C) 2026 Seyit Temiz
+// SPDX-License-Identifier: GPL-3.0-or-later (see LICENSE)
+FoamFile
+{
+	format	ascii;
+	class	dictionary;
+	object	snappyHexMeshDict;
+}
+
+castellatedMesh true;
+snap true;
+addLayers true;
+
+geometry
+{
+	ahmedbody.stl
+	{
+		type triSurface;
+		file "ahmedbody.stl";
+		regions
+		{
+			ahmedbody { name ahmedbody; }
+		}
+	}
+	legs.stl
+	{
+		type triSurface;
+		file "legs.stl";
+		regions
+		{
+			legs { name legs; }
+		}
+	}
+	box_b.stl
+	{
+		type triSurface;
+		file "box_b.stl";
+		regions
+		{
+			box_b { name box_b; }
+		}
+	}
+	box_s.stl
+	{
+		type triSurface;
+		file "box_s.stl";
+		regions
+		{
+			box_s { name box_s; }
+		}
+	}
+};
+
+castellatedMeshControls
+{
+	locationInMesh (-1141.57 0 1085.08);
+	maxLocalCells 100000;
+	maxGlobalCells 100000000;
+	minRefinementCells 10;
+	maxLoadUnbalance 0.1;
+	nCellsBetweenLevels 3;
+	resolveFeatureAngle 30;
+	allowFreeStandingZoneFaces true;
+	refinementSurfaces
+	{
+		ahmedbody.stl
+		{
+			level (4 4);
+			regions
+			{
+				ahmedbody { level (4 4); patchInfo { type wall; } }
+			}
+		}
+		legs.stl
+		{
+			level (6 6);
+			regions
+			{
+				legs { level (6 6); patchInfo { type wall; } }
+			}
+		}
+		box_b.stl
+		{
+			level (2 2);
+			faceZone box_b;
+			faceType internal;
+		}
+		box_s.stl
+		{
+			level (3 3);
+			faceZone box_s;
+			faceType internal;
+		}
+	}
+	refinementRegions
+	{
+		box_b.stl
+		{
+			mode inside;
+			levels ((1E15 2));
+		}
+		box_s.stl
+		{
+			mode inside;
+			levels ((1E15 3));
+		}
+	}
+	features
+	(
+		{
+			file "ahmed_edges.eMesh";
+			mode distance;
+			levels
+			(
+				(0 0)
+			);
+		}
+	);
+};
+
+snapControls
+{
+	nSmoothPatch 3;
+	tolerance 2.0;
+	nSolveIter 100;
+	nRelaxIter 5;
+	nFeatureSnapIter 10;
+	implicitFeatureSnap false;
+	explicitFeatureSnap true;
+	multiRegionSnap false;
+};
+
+addLayersControls
+{
+	relativeSizes true;
+	finalLayerThickness 0.3;
+	expansionRatio 1.2;
+	minThickness 0.001;
+	layers
+	{
+		ahmedbody
+		{
+			nSurfaceLayers 3;
+		}
+
+		legs
+		{
+			nSurfaceLayers 3;
+		}
+
+	}
+	nGrow 0;
+	featureAngle 100;
+	maxFaceThicknessRatio 0.5;
+	nSmoothSurfaceNormals 1;
+	nSmoothThickness 10;
+	minMedianAxisAngle 90;
+	minMedialAxisAngle 90;
+	maxThicknessToMedialRatio 0.6;
+	nSmoothNormals 3;
+	slipFeatureAngle 30;
+	nRelaxIter 20;
+	nBufferCellsNoExtrude 0;
+	nLayerIter 50;
+};
+
+meshQualityControls
+{
+	maxNonOrtho 75;
+	maxBoundarySkewness 20;
+	maxInternalSkewness 4;
+	maxConcave 80;
+	minVol -1e30;
+	minTetQuality -1e30;
+	minTwist 0.02;
+	minDeterminant 0.001;
+	minVolRatio 0.01;
+	minFaceWeight 0.05;
+	nSmoothScale 4;
+	errorReduction 0.75;
+	relaxed {maxNonOrtho 85;}
+};
+
+debugFlags
+(
+);
+
+writeFlags
+(
+);
+
+mergeTolerance 1e-6;

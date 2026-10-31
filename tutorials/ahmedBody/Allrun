@@ -1,0 +1,14 @@
+#!/bin/sh
+cd "${0%/*}" || exit 1
+# fastSnappyHexMesh - Copyright (C) 2026 Seyit Temiz
+# SPDX-License-Identifier: GPL-3.0-or-later (see LICENSE)
+#
+# Ahmed body: castellation, snapping and 3 boundary layers, serial.
+# The mesh is written to constant/polyMesh; open ahmedBody.foam in ParaView.
+
+. "$WM_PROJECT_DIR/bin/tools/RunFunctions"
+
+runApplication blockMesh
+runApplication fastSnappyHexMesh
+
+touch ahmedBody.foam

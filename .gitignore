@@ -1,0 +1,21 @@
+# build output (wmake)
+lnInclude/
+Make/linux64*/
+Make/darwin*/
+
+# results of the example case (removed by its Allclean)
+tutorials/*/constant/polyMesh/
+tutorials/*/constant/cellLevel*
+tutorials/*/constant/pointLevel*
+tutorials/*/processor*/
+tutorials/*/[1-9]*/
+tutorials/*/log.*
+tutorials/*/fsProfile/
+tutorials/*/*.foam
+
+# editors and OS
+*~
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

@@ -1,0 +1,83 @@
+// fastSnappyHexMesh test case - Copyright (C) 2026 Seyit Temiz
+// SPDX-License-Identifier: GPL-3.0-or-later (see LICENSE)
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+vertices
+(
+    (-2088.02 -2008.02 -50.0245)
+    (6064.02 -2008.02 -50.0245)
+    (6064.02 2397.02 -50.0245)
+    (-2088.02 2397.02 -50.0245)
+    (-2088.02 -2008.02 2376.02)
+    (6064.02 -2008.02 2376.02)
+    (6064.02 2397.02 2376.02)
+    (-2088.02 2397.02 2376.02)
+);
+
+blocks
+(
+    hex ( 0 1 2 3 4 5 6 7) (54 29 16) simpleGrading (1 1 1)
+);
+
+edges
+();
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 3 7 4)
+        );
+    }
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (1 2 6 5)
+        );
+    }
+    slipwall_1
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)
+        );
+    }
+    slipwall_2
+    {
+        type wall;
+        faces
+        (
+            (2 3 7 6)
+        );
+    }
+    ground
+    {
+        type wall;
+        faces
+        (
+            (0 3 2 1)
+        );
+    }
+    slipwall_3
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+        );
+    }
+);
+
+mergePatchPairs
+();

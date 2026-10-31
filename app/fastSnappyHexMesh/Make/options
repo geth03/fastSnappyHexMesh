@@ -1,0 +1,35 @@
+EXE_INC = \
+    -I$(LIB_SRC)/parallel/decompose/decompositionMethods/lnInclude \
+    -I../../src/fastSnappyHexMesh/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/meshCheck/lnInclude \
+    -I$(LIB_SRC)/fileFormats/lnInclude \
+    -I$(LIB_SRC)/triSurface/lnInclude \
+    -I$(LIB_SRC)/surfMesh/lnInclude \
+    -I$(LIB_SRC)/polyTopoChange/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lgenericFvFields \
+    -ldecompositionMethods \
+    -L$(FOAM_LIBBIN)/dummy -lscotchDecomp -lptscotchDecomp \
+    -lmeshTools \
+    -lmeshCheck \
+    -lsurfMesh \
+    -lfileFormats \
+    -lpolyTopoChange \
+    -L$(FOAM_USER_LIBBIN) -lfastSnappyHexMesh
+
+# fastSnappy: tcmalloc (gperftools, BSD-3) linked statically into the executable.
+# Its malloc/free/new/delete replace glibc's for all libraries in the process
+# (measured 2026-10-21: -13 to -18 % wall time, same mesh). Needs
+# libgoogle-perftools-dev at build time only; the executable has no runtime
+# dependency on it. If the archive is missing the build falls back to glibc.
+# (FS_NO_TCMALLOC=1 at build time: plain glibc build, used for allocator tests)
+ifeq ($(FS_NO_TCMALLOC),)
+TCMALLOC_A := $(wildcard /usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.a)
+endif
+ifneq ($(TCMALLOC_A),)
+EXE_LIBS += -Wl,--whole-archive $(TCMALLOC_A) -Wl,--no-whole-archive -lpthread
+endif

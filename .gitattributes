@@ -1,0 +1,3 @@
+# Linux line endings everywhere: the scripts run in Linux / WSL
+* text=auto eol=lf
+*.eMesh binary
